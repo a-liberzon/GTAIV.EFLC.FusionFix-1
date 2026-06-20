@@ -57,7 +57,14 @@ public:
 
             bool inCar = Natives::IsCharInAnyCar(pedHandle);
             auto pPed = CPlayer::getLocalPlayerPed();
-            bool isAiming = !inCar && pPed && CPed::ComparePedTasks(pPed, TaskID::TaskSimpleAimGun);
+            // Check both the aim sub-task and its parent gun task - while actively
+            // firing, the ped's current task briefly swaps away from TaskSimpleAimGun
+            // to a firing sub-task, even though TaskComplexGun stays active throughout.
+            // Checking only the sub-task caused the swap object to be deleted/recreated
+            // every time the player fired, snapping the camera back during shooting.
+            bool isAiming = !inCar && pPed &&
+                (CPed::ComparePedTasks(pPed, TaskID::TaskSimpleAimGun) ||
+                 CPed::ComparePedTasks(pPed, TaskID::TaskComplexGun));
 
             static auto oldKeyState = IsKeyboardKeyPressed('B');
             auto curKeyState = IsKeyboardKeyPressed('B');
