@@ -7,6 +7,7 @@ export module centeredcam;
 import common;
 import comvars;
 import settings;
+import shoulderswap;
 
 namespace CCamFollowVehicle
 {
@@ -54,6 +55,8 @@ public:
                 static auto cc = FusionFixSettings.GetRef("PREF_CENTEREDCAMERAFOOT");
                 if (cc->get() && !bLoadedCenteredOnFootCamIVasi)
                     CCamFollowPed::ms_targetOffset = 0.0f;
+                else if (bShoulderSwapActive)
+                    CCamFollowPed::ms_targetOffset = bShoulderSwapRight ? 0.2f : -0.2f;
                 else
                     CCamFollowPed::ms_targetOffset = 0.2f;
             });
