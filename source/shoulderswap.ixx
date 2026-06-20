@@ -68,7 +68,7 @@ public:
 
             static auto oldKeyState = IsKeyboardKeyPressed('B');
             auto curKeyState = IsKeyboardKeyPressed('B');
-            bool toggled = (curKeyState && !oldKeyState) || Natives::IsButtonJustPressed(0, BUTTON_BUMPER_LEFT);
+            bool toggled = (curKeyState && !oldKeyState) || Natives::IsButtonJustPressed(0, BUTTON_B);
             oldKeyState = curKeyState;
 
             if (toggled && isAiming && !Natives::IsPauseMenuActive())
