@@ -1,14 +1,12 @@
 module;
 
 #include <common.hxx>
-#include <cstdio>
 
 export module centeredcam;
 
 import common;
 import comvars;
 import settings;
-import shoulderswap;
 
 namespace CCamFollowVehicle
 {
@@ -53,27 +51,9 @@ public:
 
             static auto CCamFollowPedWidgetSetupHook = safetyhook::create_mid(pattern.get_first(0), [](SafetyHookContext& regs)
             {
-                static bool hookEverRan = false;
-                if (!hookEverRan)
-                {
-                    hookEverRan = true;
-                    ShoulderSwapLog("CCamFollowPedWidgetSetupHook: first invocation.");
-                }
-
-                static bool lastActive = false;
-                if (bShoulderSwapActive != lastActive)
-                {
-                    char buf[96];
-                    sprintf_s(buf, "CCamFollowPedWidgetSetupHook: bShoulderSwapActive changed to %s", bShoulderSwapActive ? "true" : "false");
-                    ShoulderSwapLog(buf);
-                }
-                lastActive = bShoulderSwapActive;
-
                 static auto cc = FusionFixSettings.GetRef("PREF_CENTEREDCAMERAFOOT");
                 if (cc->get() && !bLoadedCenteredOnFootCamIVasi)
                     CCamFollowPed::ms_targetOffset = 0.0f;
-                else if (bShoulderSwapActive)
-                    CCamFollowPed::ms_targetOffset = bShoulderSwapRight ? 0.2f : -0.2f;
                 else
                     CCamFollowPed::ms_targetOffset = 0.2f;
             });
